@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+set -eu
+
+human_readable=
+iec=
+percent=
+quota=
+remaining=
+percent_unit='%'
+byte_unit='B'
+while getopts 'ahipqru' opt; do
+	case "$opt" in
+		a)	percent=YesPlease
+			quota=YesPlease
+			remaining=YesPlease
+			;;
+		h)	human_readable=YesPlease;;
+		i)	iec=YesPlease;;
+		p)	percent=YesPlease;;
+		q)	quota=YesPlease;;
+		r)	remaining=YesPlease;;
+		u)	percent_unit=
+			byte_unit=
+			;;
+		*)	echo 'Unrecognised argument' >&2
+			exit 1
+			;;
+	esac
+done
+
+if [[ -z "$percent" && -z "$quota" && -z "$remaining" ]]; then
+	echo 'Must specify at least one of -a/-p/-q/-r' >&2
+	exit 1
+fi
+
+byte_numfmt_args=('--round=down' "--suffix=$byte_unit")
+if [[ "$iec" ]]; then  # human_readable is implied
+	byte_numfmt_args+=('--to=iec-i')
+elif [[ "$human_readable" ]]; then
+	byte_numfmt_args+=('--to=si')
+fi
+
+declare -a percent_numfmt_args=('--round=down' "--suffix=$percent_unit" "--format=%'.2f")
+
+json="$(curl --no-progress-meter -L https://quota.aa.net.uk --header 'Accept: application/json')"
+
+[[ "$quota" ]] && printf '%s' "$(jq '.monthly_quota' <<<"$json" | numfmt "${byte_numfmt_args[@]}")" && [[ "$percent" || "$remaining" ]] && printf ' '
+[[ "$percent" ]] && printf "%s" "$(jq '(.quota_remaining / .monthly_quota) * 100' <<<"$json" | numfmt "${percent_numfmt_args[@]}")" && [[ "$remaining" ]] && printf ' '
+[[ "$remaining" ]] && printf '%s' "$(jq '.quota_remaining' <<<"$json" | numfmt "${byte_numfmt_args[@]}")"
+printf '\n'
