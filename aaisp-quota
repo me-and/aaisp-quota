@@ -18,6 +18,14 @@ help () {
 	printf "the command line.\n"
 }
 
+for c in jq curl numfmt; do
+	if ! command -v "$c" >/dev/null; then
+		printf 'Could not find %s\n' "$c" >&2
+		printf '%s requires this tool in PATH to run\n' "$0" >&2
+		exit 1
+	fi
+done
+
 human_readable=
 iec=
 percent_unit='%'
