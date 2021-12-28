@@ -39,6 +39,12 @@ while getopts 'ahipqru' opt; do
 	esac
 done
 
+if (( $# >= OPTIND )); then
+	echo 'Unexpected arguments' >&2
+	help >&2
+	exit 1
+fi
+
 if (( "${#outputs[@]}" == 0 )); then
 	echo 'Must specify at least one of -a/-p/-q/-r' >&2
 	help >&2
