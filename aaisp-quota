@@ -75,7 +75,7 @@ for output in "${outputs[@]}"; do
 	[[ "$first" ]] || printf ' '
 	first=
 	case "$output" in
-		p)	printf "%s" "$(jq '(.quota_remaining / .monthly_quota) * 100' <<<"$json" | numfmt "${percent_numfmt_args[@]}")";;
+		p)	printf '%s' "$(jq '(.quota_remaining / .monthly_quota) * 100' <<<"$json" | numfmt "${percent_numfmt_args[@]}")";;
 		q)	printf '%s' "$(jq '.monthly_quota' <<<"$json" | numfmt "${byte_numfmt_args[@]}")";;
 		r)	printf '%s' "$(jq '.quota_remaining' <<<"$json" | numfmt "${byte_numfmt_args[@]}")"
 	esac
