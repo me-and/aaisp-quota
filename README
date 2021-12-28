@@ -1,0 +1,4 @@
+This is a simple script for getting and parsing the remaining quota for an
+Andrews & Arnold Home::1 account.  It needs to be run from a system connected
+to the Home::1 line, and uses the interface described at
+<https://support.aa.net.uk/Home::1>.
