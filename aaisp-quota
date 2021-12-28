@@ -3,22 +3,15 @@ set -eu
 
 human_readable=
 iec=
-percent=
-quota=
-remaining=
 percent_unit='%'
 byte_unit='B'
+outputs=()
 while getopts 'ahipqru' opt; do
 	case "$opt" in
-		a)	percent=YesPlease
-			quota=YesPlease
-			remaining=YesPlease
-			;;
+		a)	outputs+=(q p r);;
 		h)	human_readable=YesPlease;;
 		i)	iec=YesPlease;;
-		p)	percent=YesPlease;;
-		q)	quota=YesPlease;;
-		r)	remaining=YesPlease;;
+		p|q|r)	outputs+=("$opt");;
 		u)	percent_unit=
 			byte_unit=
 			;;
@@ -28,7 +21,7 @@ while getopts 'ahipqru' opt; do
 	esac
 done
 
-if [[ -z "$percent" && -z "$quota" && -z "$remaining" ]]; then
+if (( "${#outputs[@]}" == 0 )); then
 	echo 'Must specify at least one of -a/-p/-q/-r' >&2
 	exit 1
 fi
@@ -44,7 +37,14 @@ declare -a percent_numfmt_args=('--round=down' "--suffix=$percent_unit" "--forma
 
 json="$(curl --no-progress-meter -L https://quota.aa.net.uk --header 'Accept: application/json')"
 
-[[ "$quota" ]] && printf '%s' "$(jq '.monthly_quota' <<<"$json" | numfmt "${byte_numfmt_args[@]}")" && [[ "$percent" || "$remaining" ]] && printf ' '
-[[ "$percent" ]] && printf "%s" "$(jq '(.quota_remaining / .monthly_quota) * 100' <<<"$json" | numfmt "${percent_numfmt_args[@]}")" && [[ "$remaining" ]] && printf ' '
-[[ "$remaining" ]] && printf '%s' "$(jq '.quota_remaining' <<<"$json" | numfmt "${byte_numfmt_args[@]}")"
+first=Yes
+for output in "${outputs[@]}"; do
+	[[ "$first" ]] || printf ' '
+	first=
+	case "$output" in
+		p)	printf "%s" "$(jq '(.quota_remaining / .monthly_quota) * 100' <<<"$json" | numfmt "${percent_numfmt_args[@]}")";;
+		q)	printf '%s' "$(jq '.monthly_quota' <<<"$json" | numfmt "${byte_numfmt_args[@]}")";;
+		r)	printf '%s' "$(jq '.quota_remaining' <<<"$json" | numfmt "${byte_numfmt_args[@]}")"
+	esac
+done
 printf '\n'
