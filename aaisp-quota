@@ -9,8 +9,8 @@ help () {
 	printf '\t-r: Print the remaining quota allowance\n'
 	printf '\t-p: Print the percentage of the monthly quota remaining\n'
 	printf '\t-a: Shorthand for -qpr\n'
-	printf '\t-h: Format numbers in human-readable format (k/M/G/...)\n'
-	printf '\t-i: Format numbers using binary multipliers (ki/Mi/Gi/...)\n'
+	printf '\t-h: Format numbers in human-readable format (KB/MB/GB/...)\n'
+	printf '\t-i: Format numbers using binary multipliers (KiB/MiB/GiB/...)\n'
 	printf '\t-u: Omit unit labels (%%, B)\n'
 	printf '\n'
 	printf "If multiple values are requested, they'll be printed on a\n"
