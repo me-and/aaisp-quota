@@ -1,6 +1,23 @@
 #!/usr/bin/env bash
 set -eu
 
+help () {
+	printf '%s [options]\n' "$0"
+	printf '\n'
+	printf 'Options:\n'
+	printf '\t-q: Print the monthly quota\n'
+	printf '\t-r: Print the remaining quota allowance\n'
+	printf '\t-p: Print the percentage of the monthly quota remaining\n'
+	printf '\t-a: Shorthand for -qpr\n'
+	printf '\t-h: Format numbers in human-readable format (k/M/G/...)\n'
+	printf '\t-i: Format numbers using binary multipliers (ki/Mi/Gi/...)\n'
+	printf '\t-u: Omit unit labels (%%, B)\n'
+	printf '\n'
+	printf "If multiple values are requested, they'll be printed on a\n"
+	printf "single line separated by spaces, in the order specified on\n"
+	printf "the command line.\n"
+}
+
 human_readable=
 iec=
 percent_unit='%'
@@ -16,6 +33,7 @@ while getopts 'ahipqru' opt; do
 			byte_unit=
 			;;
 		*)	echo 'Unrecognised argument' >&2
+			help >&2
 			exit 1
 			;;
 	esac
@@ -23,6 +41,7 @@ done
 
 if (( "${#outputs[@]}" == 0 )); then
 	echo 'Must specify at least one of -a/-p/-q/-r' >&2
+	help >&2
 	exit 1
 fi
 
