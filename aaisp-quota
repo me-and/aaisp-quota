@@ -66,7 +66,7 @@ elif [[ "$human_readable" ]]; then
 	byte_numfmt_args+=('--to=si')
 fi
 
-declare -a percent_numfmt_args=('--round=down' "--suffix=$percent_unit" "--format=%'.2f")
+percent_numfmt_args=('--round=down' "--suffix=$percent_unit" "--format=%'.2f")
 
 json="$(curl --no-progress-meter -L https://quota.aa.net.uk --header 'Accept: application/json')"
 
