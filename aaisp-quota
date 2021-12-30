@@ -16,6 +16,8 @@ help () {
 	printf "If multiple values are requested, they'll be printed on a\\n"
 	printf 'single line separated by spaces, in the order specified on\n'
 	printf 'the command line.\n'
+	printf '\n'
+	printf 'Defaults to -hrp if no options are specified.\n'
 }
 
 for c in jq curl numfmt; do
@@ -31,21 +33,26 @@ iec=
 percent_unit='%'
 byte_unit='B'
 outputs=()
-while getopts 'ahipqru' opt; do
-	case "$opt" in
-		a)	outputs+=(q p r);;
-		h)	human_readable=YesPlease;;
-		i)	iec=YesPlease;;
-		p|q|r)	outputs+=("$opt");;
-		u)	percent_unit=
-			byte_unit=
-			;;
-		*)	echo 'Unrecognised argument' >&2
-			help >&2
-			exit 1
-			;;
-	esac
-done
+if (( $# > 0 )); then
+	while getopts 'ahipqru' opt; do
+		case "$opt" in
+			a)	outputs+=(q p r);;
+			h)	human_readable=YesPlease;;
+			i)	iec=YesPlease;;
+			p|q|r)	outputs+=("$opt");;
+			u)	percent_unit=
+				byte_unit=
+				;;
+			*)	echo 'Unrecognised argument' >&2
+				help >&2
+				exit 1
+				;;
+		esac
+	done
+else
+	outputs=(r p)
+	human_readable=YesPlease
+fi
 
 if (( $# >= OPTIND )); then
 	echo 'Unexpected arguments' >&2
@@ -55,6 +62,7 @@ fi
 
 if (( "${#outputs[@]}" == 0 )); then
 	echo 'Must specify at least one of -a/-p/-q/-r' >&2
+	echo 'Or no options to use the default -hrp' >&2
 	help >&2
 	exit 1
 fi
