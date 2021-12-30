@@ -13,9 +13,9 @@ help () {
 	printf '\t-i: Format numbers using binary multipliers (KiB/MiB/GiB/...)\n'
 	printf '\t-u: Omit unit labels (%%, B)\n'
 	printf '\n'
-	printf "If multiple values are requested, they'll be printed on a\n"
-	printf "single line separated by spaces, in the order specified on\n"
-	printf "the command line.\n"
+	printf "If multiple values are requested, they'll be printed on a\\n"
+	printf 'single line separated by spaces, in the order specified on\n'
+	printf 'the command line.\n'
 }
 
 for c in jq curl numfmt; do
