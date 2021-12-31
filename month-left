@@ -6,4 +6,9 @@ now="$(date '+%s')"
 
 # Work out fraction * 10000, then use sed string trickery to get it as a
 # percentage to two decimal places.
-sed -r 's/^(.*)(..)$/\1\.\2%/' <<<$(( 10000 - 10000 * (now - start_of_month) / (end_of_month - start_of_month) ))
+fraction="$(( 10000 - 10000 * (now - start_of_month) / (end_of_month - start_of_month) ))"
+case "${#fraction}" in
+	1)	printf '0.0%s%%\n' "$fraction";;
+	2)	printf '0.%s%%\n' "$fraction";;
+	*)	sed -r 's/^(.*)(..)$/\1\.\2%/' <<<"$fraction";;
+esac
