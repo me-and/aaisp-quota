@@ -1,4 +1,24 @@
-This is a simple script for getting and parsing the remaining quota for an
-Andrews & Arnold Home::1 account.  It needs to be run from a system connected
-to the Home::1 line, and uses the interface described at
+aaisp-quota is a simple script for getting and parsing the remaining quota for
+an Andrews & Arnold Home::1 account.  It needs to be run from a system
+connected to the Home::1 line, and uses the interface described at
 <https://support.aa.net.uk/Home::1>.
+
+month-remaining works out the percentage of the month that's left, so you can
+readily compare to the percentage of your quota remaining.
+
+Prerequisites:
+
+The script relies on having access to the following utilities:
+
+- jq, available in many distributions' "jq" packages, or from
+  <https://github.com/stedolan/jq>
+- curl, available in all good distributions' "curl" packages
+- numfmt, available in all good distributions' "coreutils" or similar packages
+- bash, almost certainly available in a "bash" distribution, if you're not
+  using it right now
+
+Installation:
+
+Just copy the scripts somewhere in your path, or invoke them by specifying the
+path directly, or run `sudo make install`.  The makefile isn't doing anything
+clever, it's just there for convenience.
