@@ -8,5 +8,5 @@ DESTDIR = /usr/local/bin
 # all` command to be run before `sudo make install`.
 all: ;
 
-install: aaisp-quota month-left
+install: aaisp-quota month-left xyakplot.py
 	$(INSTALL) $? $(DESTDIR)
