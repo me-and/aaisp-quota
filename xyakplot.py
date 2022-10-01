@@ -18,8 +18,8 @@ if __name__ == '__main__':
     # Configure Y axis: input data is in bytes, but we want to display things
     # in GiB.
     plt.gca().set_ylabel("Quota (GiB)")
-    plt.gca().set_ylim(bottom=0, top=1000000000000)
-    plt.gca().yaxis.set_major_locator(mticker.MultipleLocator(base=1024**3*100))
+    plt.gca().set_ylim(bottom=0, top=2000000000000)
+    plt.gca().yaxis.set_major_locator(mticker.MultipleLocator(base=1024**3*200))
     plt.gca().set_yticklabels([int(y) // 1024**3 for y in plt.gca().get_yticks()])
 
     # Configure X axist: it's just datestamps.
