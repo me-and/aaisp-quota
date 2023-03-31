@@ -30,8 +30,8 @@ if __name__ == '__main__':
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%d %b'))
 
     # Plot the data.
-    plt.plot(data.Timestamp, data["Total quota"], color="xkcd:teal blue")
-    plt.plot(data.Timestamp, data["Remaining quota"], color="xkcd:violet")
+    plt.plot(data.Timestamp, data["Total quota"])
+    plt.plot(data.Timestamp, data["Remaining quota"])
 
     # Save to the specified file.
     plt.savefig(sys.argv[2])
