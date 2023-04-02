@@ -12,6 +12,7 @@ import pandas
 
 if __name__ == '__main__':
     data = pandas.read_csv(sys.argv[1], parse_dates=[0])
+    data.Timestamp = data.Timestamp.map(lambda t: t.tz_convert('Europe/London'))
 
     plt.rcParams["figure.autolayout"] = True
 
