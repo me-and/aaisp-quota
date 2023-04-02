@@ -35,7 +35,10 @@ if __name__ == '__main__':
     plt.plot(data.Timestamp, data["Remaining quota"])
 
     start_timestamp = data.Timestamp[0].replace(hour=0, minute=0, second=0)
-    end_timestamp = start_timestamp.replace(month=start_timestamp.month + 1)
+    if start_timestamp.month == 12:
+        end_timestamp = start_timestamp.replace(year=start_timestamp.year + 1, month=1)
+    else:
+        end_timestamp = start_timestamp.replace(month=start_timestamp.month + 1)
     plt.plot((start_timestamp, end_timestamp), (data["Remaining quota"][0], 0))
     plt.plot((start_timestamp, end_timestamp), (data["Total quota"][0], 0))
 
