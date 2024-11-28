@@ -4,11 +4,21 @@ start_of_month="$(date -d "$(date '+%Y-%m-01')" '+%s')"
 end_of_month="$(date -d "$(date '+%Y-%m-01') +1 month" '+%s')"
 now="$(date '+%s')"
 
+percent_unit='%'
+while getopts u opt; do
+	case "$opt" in
+		u)	percent_unit='';;
+		*)	echo 'Unrecognised argument' >&2
+			exit 1
+			;;
+	esac
+done
+
 # Work out fraction * 10000, then use sed string trickery to get it as a
 # percentage to two decimal places.
 fraction="$(( 10000 - 10000 * (now - start_of_month) / (end_of_month - start_of_month) ))"
 case "${#fraction}" in
-	1)	printf '0.0%s%%\n' "$fraction";;
-	2)	printf '0.%s%%\n' "$fraction";;
-	*)	sed -r 's/^(.*)(..)$/\1\.\2%/' <<<"$fraction";;
+	1)	printf '0.0%s%s\n' "$fraction" "$percent_unit";;
+	2)	printf '0.%s%s\n' "$fraction" "$percent_unit";;
+	*)	sed -r 's/^(.*)(..)$/\1\.\2'"$percent_unit"'/' <<<"$fraction";;
 esac
